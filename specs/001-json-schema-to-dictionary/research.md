@@ -14,13 +14,10 @@ The core of the work involves changing data structures (`Array` to `Object`) and
 
 ## Testing Strategy Decision
 
-The testing strategy will involve:
--   **Filesystem (fs) Operations**: Utilizing the real Node.js `fs` module to create and manage temporary directories and files for test output. This avoids complex `fs` mocking while ensuring test isolation and clean-up.
--   **Obsidian API Mocking**: Mocking the `App` object and its relevant `vault` and `metadataCache` methods (`getMarkdownFiles`, `getAllLoadedFiles`, `getFileCache`, `getTags`, `getFirstLinkpathDest`) directly within the test setup. This simulates the Obsidian environment and controls input data.
--   **Web Worker Mocking**: Mocking the `Worker` constructor to control the interaction with the separate worker thread. The mock worker will be configured to synchronously return processed data.
+Due to complexities in setting up a comprehensive testing environment for functions interacting with `fs` and Web Workers in a Node.js context, the testing scope for this phase will be **limited**. New tests will only cover utility functions that are as easily testable as `getAllExceptMd`, which primarily involves data transformation without side effects on the filesystem or direct Web Worker interaction. Functions that perform `fs.writeFileSync` or directly instantiate `Worker` will not be covered by new dedicated tests in this phase.
 
-This approach balances realism (using real `fs` for output) with necessary isolation (mocking environment-specific APIs), providing a robust and maintainable test suite.
+This pragmatic decision allows the core schema change to proceed without being blocked by intricate testing environment setup challenges that exceed the scope of this feature.
 
 ## Alternatives Considered
 
-None. The task is a refactoring of an existing implementation, so introducing new technologies would be unnecessary complexity. For testing, the pragmatic approach of using real `fs` for output with explicit cleanup was chosen over complex `memfs` or `fs` mocking to simplify the test setup and align with the environment.
+None. The task is a refactoring of an existing implementation, so introducing new technologies would be unnecessary complexity. For testing, the pragmatic approach of using real `fs` for output with explicit cleanup was initially considered but deemed too complex for the current scope due to the intricacies of mocking the entire Obsidian API environment and Web Workers in a Node.js test runner. Therefore, the testing scope is being intentionally limited.

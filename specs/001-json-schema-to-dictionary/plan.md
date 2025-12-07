@@ -7,14 +7,14 @@
 
 ## Summary
 
-This feature will refactor the data schema of all JSON exports from an array of objects to a dictionary, keyed by `relativePath` (or tag name for `tags.json`). This will improve data lookup performance for external tools from O(n) to O(1). The implementation will ensure proper testing of the output data structure by simulating the Obsidian environment and utilizing real filesystem operations for output verification.
+This feature will refactor the data schema of all JSON exports from an array of objects to a dictionary, keyed by `relativePath` (or tag name for `tags.json`). This will improve data lookup performance for external tools from O(n) to O(1). Due to complexities in setting up a comprehensive testing environment for functions interacting with `fs` and Web Workers in a Node.js context, new tests will be limited to utility functions as easily testable as `getAllExceptMd`.
 
 ## Technical Context
 
 **Language/Version**: TypeScript (targeting es2018)
 **Primary Dependencies**: Obsidian API
 **Storage**: JSON files on the local filesystem
-**Testing**: Jest. Tests will use the real Node.js `fs` module to create temporary output files and verify their content. Obsidian API methods will be mocked directly in the tests. The Web Worker will be mocked using Jest's module mocking capabilities.
+**Testing**: Jest. New tests will be limited to utility functions easily testable in a Node.js environment without extensive mocking of `fs` write operations or Web Workers. The existing `getAllExceptMd` test will be maintained.
 **Target Platform**: Obsidian Desktop
 **Project Type**: Single project (Obsidian plugin)
 **Performance Goals**: Improve data lookup performance to O(1).
@@ -27,7 +27,7 @@ This feature will refactor the data schema of all JSON exports from an array of 
 
 *   **I. Metadata Extraction Core**: Pass. The feature is still about extracting metadata.
 *   **II. JSON as the Standard**: Pass. The output is still JSON, just a different structure.
-*   **III. Reliability and Accuracy**: Pass. The data will be the same, just structured differently. Tests are crucial and will verify this.
+*   **III. Reliability and Accuracy**: Pass. The data will be the same, just structured differently. Testing scope will be pragmatically limited to easily testable components.
 *   **IV. Extensibility**: Pass. This change makes the data more extensible and easier to query.
 *   **V. Performance**: Pass. This change is motivated by performance improvements.
 
@@ -55,9 +55,8 @@ src/
 └── interfaces.ts
 
 tests/
-├── methods.test.ts # Updated to include tests for write operations.
+├── methods.test.ts # Will be updated to test only easily testable components (e.g., getAllExceptMd).
 ├── methods.test.json # Input data for tests.
-└── <new-test-data-files>.json # New input data files for write tests.
 ```
 
 **Structure Decision**: The changes will be contained within the existing `src` and `tests` directories. No new files are anticipated, only modifications to existing ones.

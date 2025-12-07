@@ -24,6 +24,7 @@ TypeScript (targeting es2018): Follow standard conventions
 
 ## Recent Changes
 - 001-json-schema-to-dictionary: Added TypeScript (targeting es2018) + Obsidian API
+- 001-json-schema-to-dictionary: Added TypeScript (targeting es2018) + Obsidian API
 
 - 001-json-schema-to-dictionary: Added TypeScript (targeting es2018) + Obsidian API
 
