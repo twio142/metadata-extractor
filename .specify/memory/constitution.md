@@ -28,7 +28,7 @@ The primary function of this plugin is to reliably extract metadata from notes w
 All extracted metadata MUST be stored in well-structured JSON files. This ensures that external tools can easily and consistently access the information. The JSON schema SHOULD be documented and maintained.
 
 ### III. Reliability and Accuracy
-The extracted metadata MUST be an accurate representation of the data within the Obsidian vault. The plugin MUST be robust against file changes, deletions, and other vault operations. A comprehensive test suite IS REQUIRED to ensure this principle is met.
+The extracted metadata MUST be an accurate representation of the data within the Obsidian vault. The plugin MUST be robust against file changes, deletions, and other vault operations. A comprehensive test suite IS REQUIRED to ensure this principle is met, **though new tests will be pragmatically limited to easily testable components (e.g., utility functions for data transformation), avoiding functions with complex environmental dependencies (such as direct filesystem writes or Web Worker interactions) that introduce disproportionate testing overhead in the current Node.js Jest environment.**
 
 ### IV. Extensibility
 The plugin architecture SHOULD be designed to be extensible. It should be straightforward to add new metadata sources or modify existing ones without requiring a full rewrite of the core logic.
@@ -48,4 +48,4 @@ All new features and bug fixes MUST be developed in a separate branch and submit
 
 This constitution is the guiding document for the project. All development and contributions MUST adhere to these principles. Amendments to this constitution require a pull request and approval from the project maintainers.
 
-**Version**: 1.0.0 | **Ratified**: 2025-12-07 | **Last Amended**: 2025-12-07
+**Version**: 1.0.1 | **Ratified**: 2025-12-07 | **Last Amended**: 2025-12-07
