@@ -91,5 +91,5 @@ export interface extendedFrontMatterCache extends FrontMatterCache {
 	cssclass?: string;
 	publish?: boolean;
 	position: Pos;
-	[key: string]: any;
+	[key: string]: unknown;
 }

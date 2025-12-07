@@ -12,7 +12,6 @@ import {
 	parseFrontMatterAliases,
 	TAbstractFile,
 	TFile,
-	TFolder,
 } from 'obsidian';
 import type {
 	backlinks,
@@ -333,10 +332,10 @@ export default class Methods {
 		const worker = new Worker(); // Fixed call to new Worker()
 
 		worker.postMessage([metadataCache, backlinkObj]);
-		worker.onerror = (event: any) => {
+		worker.onerror = () => {
 			new Notice('Something went wrong with the backlinks calculation.');
 		};
-		worker.onmessage = (event: any) => {
+		worker.onmessage = (event: unknown) => {
 			const updatedMetadataCache = event.data; // Worker returns the dictionary
 			writeFileSync(path, JSON.stringify(updatedMetadataCache, null, 2));
 			if (this.plugin.settings.consoleLog) {
