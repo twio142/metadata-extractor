@@ -34,7 +34,7 @@
 		"releaseCommitMessageFormat": "Metadata Extractor: {{currentTag}}"
 	},
 	"keywords": [],
-	"author": "kometenstaub",
+	"author": "twio142",
 	"license": "MIT",
 	"devDependencies": {
 		"@types/eslint": "^9.6.1",

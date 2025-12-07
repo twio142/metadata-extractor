@@ -1,5 +1,9 @@
 # Metadata Extractor Obsidian plugin
 
+>[!NOTE]
+>
+> This is a fork of the original [Metadata Extractor](https://github.com/kometenstaub/metadata-extractor) Obsidian plugin with some modifications.
+
 This plugin allows you to write Obsidian vault metadata, which is only accessible via plugin, onto the hard drive. This enables Third-party apps to access Obsidian metadata which they normally wouldn't be able to access. Exemplary use cases are launcher apps (e.g. Alfred, Ulauncher) or graph analysis software.
 
 See [this guide](https://github.com/kometenstaub/metadata-extractor/blob/main/docs/Guide%20-%20Controlling%20Obsidian%20via%20Third-Party-App.md) for more information on Controlling Obsidian via a Third-party App.
@@ -16,15 +20,15 @@ Example:
 
 ```json
 {
-	"#css-themes": {
+	"css-themes": {
 		"tagCount": 1,
 		"relativePaths": ["Advanced topics/Contributing to Obsidian.md"]
 	},
-	"#insider-build": {
+	"insider-build": {
 		"tagCount": 1,
 		"relativePaths": ["Advanced topics/Insider builds.md"]
 	},
-	"#anothertag": {
+	"anothertag": {
 		"tagCount": 2,
 		"relativePaths": [
 			"Plugins/Zettelkasten prefixer.md",
@@ -116,7 +120,6 @@ Backlinks always have a `relativePath` property because the file linking to the 
 
 `link`, `cleanLink` and `displayText` behave as [the links interface](#links-interface)
 
-
 ### Non-Markdown files metadata export (`allExceptMd.json`)
 
 This export writes a JSON file where each key is the `relativePath` of a non-Markdown file or folder, and the value is its corresponding file/folder object.
@@ -139,7 +142,6 @@ This export writes a JSON file where each key is the `relativePath` of a non-Mar
 
 The `file` object contains `name` (including extension), `basename` (excluding extension), and `relativePath` (from vault root). The `folder` object contains `name` and `relativePath`.
 
-
 ### Canvas metadata export (`canvas.json`)
 
 This export writes a JSON file where each key is the `relativePath` of a canvas file, and the value is its data object.
@@ -158,7 +160,6 @@ This export writes a JSON file where each key is the `relativePath` of a canvas 
   }
 }
 ```
-
 
 ## Configuration
 
