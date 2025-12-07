@@ -1,14 +1,16 @@
 import type { Metadata, backlinks } from 'src/interfaces';
 
 self.onmessage = function (e) {
-	const metadataCache: Metadata[] = e.data[0];
+	const metadataCache: { [path: string]: Metadata } = e.data[0];
 	let backlinkObj: backlinks[] = e.data[1];
-	const newMetadataCache: Metadata[] = metadataCache;
 
-	metadataCache.forEach((file: Metadata) => {
+	for (const path in metadataCache) {
+		const file = metadataCache[path];
 		const fileName = file.fileName;
 		const relativeFilePath = file.relativePath;
-		newMetadataCache.forEach((otherFile: Metadata) => {
+
+		for (const otherPath in metadataCache) {
+			const otherFile = metadataCache[otherPath];
 			// don't check the same file
 			if (fileName !== otherFile.fileName) {
 				if (otherFile.links) {
@@ -40,7 +42,7 @@ self.onmessage = function (e) {
 			file.backlinks = backlinkObj;
 		} // empty it, otherwise it would collect all of the links in the forEach loop
 		backlinkObj = [];
-	});
+	}
 
 	self.postMessage(metadataCache);
 };

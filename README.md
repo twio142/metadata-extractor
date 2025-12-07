@@ -6,58 +6,53 @@ See [this guide](https://github.com/kometenstaub/metadata-extractor/blob/main/do
 
 ## There are four JSON-exports
 
-They can be executed on a schedule.
+They can be executed on a schedule. All exports are now dictionary-based for efficient lookup.
 
-### Tag export
+### Tag export (`tags.json`)
 
-One writes a JSON file to disk with each tag and its corresponding file paths.
+This export writes a JSON file where each key is a tag name, and the value is an object containing the tag count and corresponding file paths.
 
 Example:
 
 ```json
-[
-	{
-		"tag": "css-themes",
-		"tagCount": 5,
+{
+	"#css-themes": {
+		"tagCount": 1,
 		"relativePaths": ["Advanced topics/Contributing to Obsidian.md"]
 	},
-	{
-		"tag": "insider-build",
-		"tagCount": 3,
+	"#insider-build": {
+		"tagCount": 1,
 		"relativePaths": ["Advanced topics/Insider builds.md"]
 	},
-	{
-		"tag": "anothertag",
+	"#anothertag": {
 		"tagCount": 2,
 		"relativePaths": [
 			"Plugins/Zettelkasten prefixer.md",
 			"Advanced topics/Using obsidian URI.md"
 		]
 	}
-]
+}
 ```
 
-
-TypeScript interface:
+TypeScript interface for each entry (value):
 
 ```ts
 /**
- * JSON export: tagToFile[]
+ * JSON export entry for a single tag
  */
-interface tagToFile {
-	tag: string;
+interface TagEntry {
 	tagCount: number;
-	relativePaths: string[] | string;
+	relativePaths: string[];
 };
 ```
 
-### Markdown notes metadata export
+### Markdown notes metadata export (`metadata.json`)
 
-The second one writes a JSON file to disk with metadata for each file name. This is how the JSON structure is as a TypeScript interface.
+This export writes a JSON file where each key is the `relativePath` of a Markdown file, and the value is its comprehensive metadata object.
 
 ```ts
 /**
- * JSON export: Metadata[]
+ * JSON export: Metadata object for a single file
  */
 import {extendedFrontMatterCache} from "./interfaces";
 
@@ -95,10 +90,9 @@ interface extendedFrontMatterCache {
 }
 ```
 
+The exported object contains `Metadata` objects, one object for each Markdown file in your vault, keyed by its `relativePath`.
 
-The exported array contains a JSON array with `Metadata` objects, one object for each Markdown file in your vault.
-
-All objects have a `fileName` and a `relativePath`. `fileName` doesn't contain the `.md` extension, `relativePath` is the path from your vault root. 
+All objects have a `fileName` and a `relativePath`. `fileName` doesn't contain the `.md` extension, `relativePath` is the path from your vault root.
 
 If a file has tags, the object has a `tags` property that contains an array of tags. Tags are all lower-cased and if a tag appears more than one time in a file, it will only appear one time in `tags`. If a file has any frontmatter it is included in `frontmatter`. The structure of the object depends on your frontmatter.
 
@@ -116,64 +110,53 @@ The `links` contain both links to existing and non-existing files. If a file doe
 
 #### `backlinks` interface
 
-Backlinks always have a `relativePath` property because the file linking to the current file (object) needs to exist. 
+Backlinks always have a `relativePath` property because the file linking to the current file (object) needs to exist.
 
 `fileName` and `relativePath` are the file which contains the backlink.
 
 `link`, `cleanLink` and `displayText` behave as [the links interface](#links-interface)
 
 
+### Non-Markdown files metadata export (`allExceptMd.json`)
 
+This export writes a JSON file where each key is the `relativePath` of a non-Markdown file or folder, and the value is its corresponding file/folder object.
 
-### Non-Markdown files metadata export
-
-
-The third writes a JSON file containing both all folders and non-Markdown files. The structure is like this.
-
-```ts
-/**
- * JSON export
- */
-interface exceptMd {
-	folders: folder[];
-	nonMdFiles?: file[];
-}
-
-interface folder {
-	name: string;
-	relativePath: string;
-}
-
-interface file {
-	name: string;
-	basename: string;
-	relativePath: string;
+```json
+{
+  "folder/subfolder": {
+    "name": "subfolder",
+    "relativePath": "folder/subfolder"
+  },
+  "images/photo.png": {
+    "name": "photo.png",
+    "basename": "photo",
+    "relativePath": "images/photo.png"
+  }
 }
 ```
 
-#### `file` interface
+#### `file` and `folder` interfaces (used as values)
 
-The `name` is the file name including the extension, `basename` excludes it. `relativePath` is the path from the vault root.
+The `file` object contains `name` (including extension), `basename` (excluding extension), and `relativePath` (from vault root). The `folder` object contains `name` and `relativePath`.
 
 
-### Canvas metadata export
+### Canvas metadata export (`canvas.json`)
 
-The fourth export writes a JSON file containing `name`, `basename` and `relativePath` of canvas files as object in an array.
-
+This export writes a JSON file where each key is the `relativePath` of a canvas file, and the value is its data object.
 
 ```json
-[
-  {
+{
+  "Inbox/my-canvas.canvas": {
     "name": "my-canvas.canvas",
     "basename": "my-canvas",
     "relativePath": "Inbox/my-canvas.canvas"
   },
-  {
+  "visualisation.canvas": {
     "name": "visualisation.canvas",
     "basename": "visualisation",
     "relativePath": "visualisation.canvas"
   }
-]
+}
 ```
 
 

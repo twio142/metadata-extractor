@@ -1,23 +1,19 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`that we can create a list of TFile and TFolder 1`] = `
-"{
-  "folders": [
-    {
-      "name": "",
-      "relativePath": "/"
-    },
-    {
-      "name": "folder",
-      "relativePath": "folder"
-    }
-  ],
-  "nonMdFiles": [
-    {
-      "name": "Image.png",
-      "basename": "Image",
-      "relativePath": "Image.png"
-    }
-  ]
-}"
+{
+  "/": {
+    "name": "",
+    "relativePath": "/",
+  },
+  "Image.png": {
+    "basename": "Image",
+    "name": "Image.png",
+    "relativePath": "Image.png",
+  },
+  "folder": {
+    "name": "folder",
+    "relativePath": "folder",
+  },
+}
 `;

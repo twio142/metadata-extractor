@@ -26,6 +26,5 @@ function getAllFilesForTEST(s: string) {
 test('that we can create a list of TFile and TFolder', () => {
     const {folders, files} = getAllFilesForTEST('./methods.test.json');
     const result = getAllExceptMd(folders, files);
-    const resultAsJSON = JSON.stringify(result, null, 2)
-    expect(resultAsJSON).toMatchSnapshot();
+    expect(result).toMatchSnapshot();
 });

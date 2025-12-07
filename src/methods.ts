@@ -35,12 +35,12 @@ function getAll(allFiles: TAbstractFile[]) {
 	const files: file[] = [];
 
 	for (const TAFile of allFiles) {
-		if (TAFile instanceof TFolder) {
+		if ('children' in TAFile) { // Check for 'children' property to identify folders
 			folders.push({ name: TAFile.name, relativePath: TAFile.path });
-		} else if (TAFile instanceof TFile) {
+		} else if ('extension' in TAFile) { // Check for 'extension' property to identify files
 			files.push({
 				name: TAFile.name,
-				basename: TAFile.basename,
+				basename: (TAFile as TFile).basename, // Cast to TFile to access basename
 				relativePath: TAFile.path,
 			});
 		}
@@ -96,8 +96,9 @@ export default class Methods {
 		}
 		const allFiles = this.app.vault.getAllLoadedFiles();
 		const { folders, files } = getAll(allFiles);
-		const foldersAndFiles = getAllExceptMd(folders, files);
-		writeFileSync(path, JSON.stringify(foldersAndFiles, null, 2));
+		// getAllExceptMd now returns a dictionary directly
+		const foldersAndFilesDictionary = getAllExceptMd(folders, files);
+		writeFileSync(path, JSON.stringify(foldersAndFilesDictionary, null, 2));
 
 		if (this.plugin.settings.consoleLog) {
 			console.log(
@@ -113,16 +114,14 @@ export default class Methods {
 			path = this.getAbsolutePath(fileName);
 		}
 		const allFiles = this.app.vault.getAllLoadedFiles();
-		const files: file[] = [];
+		const files: { [path: string]: file } = {}; // Changed to dictionary
 		for (const TAFile of allFiles) {
-			if (TAFile instanceof TFile) {
-				if (TAFile.extension === 'canvas') {
-					files.push({
-						name: TAFile.name,
-						basename: TAFile.basename,
-						relativePath: TAFile.path,
-					});
-				}
+			if ('extension' in TAFile && (TAFile as TFile).extension === 'canvas') { // Updated check
+				files[TAFile.path] = { // Assign to key
+					name: TAFile.name,
+					basename: (TAFile as TFile).basename,
+					relativePath: TAFile.path,
+				};
 			}
 		}
 		writeFileSync(path, JSON.stringify(files, null, 2));
@@ -221,10 +220,11 @@ export default class Methods {
 
 		// what will be written to disk
 		const tagToFile: {
-			tag: string;
-			tagCount: number;
-			relativePaths: string[] | string;
-		}[] = [];
+			[tag: string]: {
+				tagCount: number;
+				relativePaths: string[];
+			};
+		} = {}; // Changed to dictionary
 		for (const tag of uniqueAllTagsFromCache) {
 			const fileNameArray: string[] = [];
 			// see which files contain the current tag
@@ -234,11 +234,10 @@ export default class Methods {
 				}
 			}
 			const numberOfNotes: number = tagsWithCount[tag];
-			tagToFile.push({
-				tag: tag,
+			tagToFile[tag] = { // Assign to key
 				tagCount: numberOfNotes,
 				relativePaths: fileNameArray,
-			});
+			};
 		}
 
 		writeFileSync(path, JSON.stringify(tagToFile, null, 2));
@@ -255,7 +254,7 @@ export default class Methods {
 		if (!this.plugin.settings.metadataPath) {
 			path = this.getAbsolutePath(fileName);
 		}
-		let metadataCache: Metadata[] = [];
+		const metadataCache: { [path: string]: Metadata } = {}; // Changed to dictionary
 
 		for (const tfile of this.app.vault.getMarkdownFiles()) {
 			const displayName = tfile.basename;
@@ -324,22 +323,22 @@ export default class Methods {
 			Object.assign(metaObj, linkMetaObj);
 
 			if (Object.keys(metaObj).length > 0) {
-				metadataCache.push(metaObj);
+				metadataCache[relativeFilePath] = metaObj; // Assign to key
 			}
 		}
 
 		//backlinks
 		const backlinkObj: backlinks[] = [];
 
-		const worker = Worker();
+		const worker = new Worker(); // Fixed call to new Worker()
 
 		worker.postMessage([metadataCache, backlinkObj]);
 		worker.onerror = (event: any) => {
 			new Notice('Something went wrong with the backlinks calculation.');
 		};
 		worker.onmessage = (event: any) => {
-			metadataCache = event.data;
-			writeFileSync(path, JSON.stringify(metadataCache, null, 2));
+			const updatedMetadataCache = event.data; // Worker returns the dictionary
+			writeFileSync(path, JSON.stringify(updatedMetadataCache, null, 2));
 			if (this.plugin.settings.consoleLog) {
 				console.log(
 					'Metadata Extractor plugin: wrote the metadata JSON file'
