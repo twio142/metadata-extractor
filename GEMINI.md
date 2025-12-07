@@ -3,6 +3,7 @@
 Auto-generated from all feature plans. Last updated: 2025-12-07
 
 ## Active Technologies
+- JSON files on the local filesystem (001-json-schema-to-dictionary)
 
 - TypeScript (targeting es2018) + Obsidian API (001-json-schema-to-dictionary)
 
@@ -22,6 +23,7 @@ npm test && npm run lint
 TypeScript (targeting es2018): Follow standard conventions
 
 ## Recent Changes
+- 001-json-schema-to-dictionary: Added TypeScript (targeting es2018) + Obsidian API
 
 - 001-json-schema-to-dictionary: Added TypeScript (targeting es2018) + Obsidian API
 
