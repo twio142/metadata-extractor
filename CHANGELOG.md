@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/twio142/metadata-extractor/compare/1.1.0...2.0.0) (2025-12-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **json-schema:** The top-level structure of all generated JSON files has
+changed from an array to a dictionary. Consumers of these files (e.g.,
+external tools, scripts) must be updated to expect a dictionary keyed by
+`relativePath` (or tag name for `tags.json`).
+
+### Features
+
+* **json-schema:** refactor JSON export schema from arrays to dictionaries ([b8350d7](https://github.com/twio142/metadata-extractor/commit/b8350d7d82d539fbb733474c42797fdb48298c0f))
+
 ## [1.1.0](https://github.com/kometenstaub/metadata-extractor/compare/1.0.2...1.1.0) (2022-12-20)
 
 
