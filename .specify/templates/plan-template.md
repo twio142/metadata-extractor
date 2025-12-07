@@ -33,7 +33,7 @@
 
 *   **I. Metadata Extraction Core**: Does the feature contribute to extracting metadata from notes?
 *   **II. JSON as the Standard**: Does the feature handle metadata in the standard JSON format?
-*   **III. Reliability and Accuracy**: Are there tests to ensure the feature is reliable and accurate?
+*   **III. Reliability and Accuracy**: Are there tests to ensure the feature is reliable and accurate, **with pragmatic limitations for functions with complex environmental dependencies (such as direct filesystem writes or Web Worker interactions)?**
 *   **IV. Extensibility**: Is the feature designed in an extensible way?
 *   **V. Performance**: Does the feature consider performance implications?
 

@@ -69,13 +69,6 @@ export interface backlinks {
 	displayText?: string;
 }
 
-/**
- * There is at least the root folder
- */
-export interface exceptMd {
-	folders: folder[];
-	nonMdFiles?: file[];
-}
 
 export interface folder {
 	name: string;
@@ -98,5 +91,5 @@ export interface extendedFrontMatterCache extends FrontMatterCache {
 	cssclass?: string;
 	publish?: boolean;
 	position: Pos;
-	[key: string]: any;
+	[key: string]: unknown;
 }
