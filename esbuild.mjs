@@ -65,7 +65,6 @@ const copyManifest = {
 			entryPoints: ['src/main.ts'],
 			bundle: true,
             target: "es2018",
-			watch: !isProd,
 			platform: 'node',
 			external: ['obsidian'],
 			format: 'cjs',
